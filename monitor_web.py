@@ -11,20 +11,23 @@ import json
 urls = (
     '/(.*)/','redirect',
     '/data', 'data',
-    '/','index',
+    '/index','index',
     )
-
-def notfound():
-    return web.seeother('./index')
-
-app = web.application(urls, globals())
-app.notfound = notfound
-
-db1 = web.database(dbn = 'mysql', db='webuser', user='root',pw='root')  
 
 class redirect:
     def GET(self, path):
         web.seeother('/'+ path)
+'''
+        
+def notfound():
+    return web.seeother('./index')
+'''
+app = web.application(urls, globals())
+#app.notfound = notfound
+
+db1 = web.database(dbn = 'mysql', db='webuser', user='root',pw='root')  
+
+
 
 
 class index:
@@ -38,7 +41,7 @@ class data:
         results = db1.query(sql )
         arr = []
         for item in results:
-            arr.append([item[1]*1000,item[0]])
+            arr.append([int(item.time)*1000,item.memory])
         return json.dumps(arr)
 
 
